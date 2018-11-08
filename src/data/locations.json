@@ -1,0 +1,66 @@
+[
+  {
+    "name": "Please Touch Museum",
+    "position": {"lat": 39.9793975, "lng": -75.2111222},
+    "street": "4231 Avenue of the Republic",
+    "cityState": "Philadelphia, PA 19131",
+    "placeID": "",
+    "neighborhood": "west philadelphia"
+  },
+  {
+    "name": "Philadelphia Zoo",
+    "position": {"lat": 39.9707536, "lng": -75.1971718},
+    "street": "3400 W Girard Ave",
+    "cityState": "Philadelphia, PA 19104",
+    "placeID": "",
+    "neighborhood": "west philadelphia"
+  },
+  {
+    "name": "Franklin Institute",
+    "position": {"lat": 39.958143, "lng": -75.1748145},
+    "street": "222 N 20th Street",
+    "cityState": "Philadelphia, PA 19103",
+    "placeID": "",
+    "neighborhood": "center city"
+  },
+  {
+    "name": "Franklin Square",
+    "position": {"lat": 39.9555311, "lng": -75.1523687},
+    "street": "200 N 6th St",
+    "cityState": "Philadelphia, PA 19106",
+    "placeID": "",
+    "neighborhood": "center city"
+  },
+  {
+    "name": "Adventure Aquarium",
+    "position": {"lat": 39.9440936, "lng": -75.1328447},
+    "street": "1 Riverside Drive",
+    "cityState": "Camden, NJ 08103",
+    "placeID": "",
+    "neighborhood": "south jersey"
+  },
+  {
+    "name": "Spruce Street Harbor Park",
+    "position": {"lat": 39.9450991, "lng": -75.1432427},
+    "street": "301 S Christopher Columbus Boulevard",
+    "cityState": "Philadelphia, PA 19106",
+    "placeID": "",
+    "neighborhood": "center city"
+  },
+  {
+    "name": "Treetop Quest",
+    "position": {"lat": 39.9989362, "lng": -75.2034423},
+    "street": "51 Chamounix Drive",
+    "cityState": "Philadelphia, PA 19131",
+    "placeID": "",
+    "neighborhood": "west philadelphia"
+  },
+  {
+    "name": "Smith Memorial Playground",
+    "position": {"lat": 39.981737, "lng": -75.1978785},
+    "street": "3500 Reservoir Drive",
+    "cityState": "Philadelphia, PA 19121",
+    "placeID": "",
+    "neighborhood": "west philadelphia"
+  }
+]

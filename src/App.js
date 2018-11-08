@@ -23,22 +23,19 @@ class App extends Component {
 
   initMap = () => {
     let locations = this.state.locations
+    let infowindow = new window.google.maps.InfoWindow()
     let map = new window.google.maps.Map(
       document.getElementById('map'), {
         center: {lat: 39.9526, lng: -75.1652},
         zoom: 13,
         mapTypeControl: false
       })
-    let infowindow = new window.google.maps.InfoWindow()
-    let bounds = new window.google.maps.LatLngBounds()
 
     locations.map(location => {
       let marker = new window.google.maps.Marker({
         position: location.position,
-        animation: window.google.maps.Animation.DROP,
-        map: map
+        animation: window.google.maps.Animation.DROP
       })
-      bounds.extend(marker.position)
       marker.addListener('click', function() {
         infowindow.setContent(location.name)
         infowindow.open(map, marker)
@@ -47,11 +44,10 @@ class App extends Component {
       return null
     })
 
-    map.fitBounds(bounds);
     this.setState({
       locations: locations,
       map: map
-    })
+    }, this.showMarkers)
   }
 
   initScript = (url) => {
@@ -85,8 +81,14 @@ class App extends Component {
   }
 
   showMarkers = () => {
+    var map = this.state.map
     var locations = this.state.locations
-    locations.map(location => location.marker.setMap(this.state.map))
+    var bounds = new window.google.maps.LatLngBounds()
+    locations.map(location => {
+      location.marker.setMap(this.state.map)
+      bounds.extend(location.position)
+    })
+    map.fitBounds(bounds)
     this.setState({
       locations: locations
     })

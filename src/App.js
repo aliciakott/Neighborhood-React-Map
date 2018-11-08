@@ -46,7 +46,7 @@ class App extends Component {
       location.marker = marker
       return null
     })
-    
+
     map.fitBounds(bounds);
     this.setState({
       locations: locations,
@@ -101,7 +101,7 @@ class App extends Component {
           </h1>
         </header>
         <main>
-          <section id="location-selection">
+          <section id="sidebar">
             <div id="">
               <select aria-label="filter locations by neighborhood" id="neighborhoods-select" onChange={(event) => this.filterLocales(event.target.value)}>
                 <option value="all">All Neighborhoods</option>
@@ -109,9 +109,7 @@ class App extends Component {
                 <option value="south jersey">South Jersey</option>
                 <option value="west philadelphia">West Philadelphia</option>
               </select>
-            </div>
 
-            <div>
               <ul id="list-locales">
                 {this.state.locations.map(location => (
                   <li key={location.name}>{location.name}</li>
@@ -122,7 +120,10 @@ class App extends Component {
 
           <section id="map-container">
             <div id="map" role="application" aria-roledescription="map" aria-label="map of greater philadelphia"></div>
-            <div id="added-info"></div>
+          </section>
+
+          <section id="modal-container">
+            <div id="modal"></div>
           </section>
         </main>
       </div>

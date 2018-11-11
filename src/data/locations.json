@@ -1,66 +1,92 @@
 [
   {
-    "name": "Please Touch Museum",
-    "position": {"lat": 39.9793975, "lng": -75.2111222},
-    "street": "4231 Avenue of the Republic",
-    "cityState": "Philadelphia, PA 19131",
+    "name": "The Bronx Zoo",
+    "position": {"lat": 40.8505989, "lng": -73.8791869},
+    "street": "2300 Southern Blvd",
+    "cityState": "Bronx, NY 10460",
     "placeID": "",
-    "neighborhood": "west philadelphia"
+    "neighborhood": "bronx",
+    "url": "https://bronxzoo.com/"
   },
   {
-    "name": "Philadelphia Zoo",
-    "position": {"lat": 39.9707536, "lng": -75.1971718},
-    "street": "3400 W Girard Ave",
-    "cityState": "Philadelphia, PA 19104",
+    "name": "New York Hall Of Science",
+    "position": {"lat": 40.747151, "lng": -73.851666},
+    "street": "47-01 111th St",
+    "cityState": "Corona, NY 11368",
     "placeID": "",
-    "neighborhood": "west philadelphia"
+    "neighborhood": "queens",
+    "url": "https://nysci.org/"
   },
   {
-    "name": "Franklin Institute",
-    "position": {"lat": 39.958143, "lng": -75.1748145},
-    "street": "222 N 20th Street",
-    "cityState": "Philadelphia, PA 19103",
+    "name": "Staten Island Children's Museum",
+    "position": {"lat": 40.642459, "lng": -74.101935},
+    "street": "1000 Richmond Terrace building M",
+    "cityState": "Staten Island, NY 10301",
     "placeID": "",
-    "neighborhood": "center city"
+    "neighborhood": "staten island",
+    "url": "http://sichildrensmuseum.org"
   },
   {
-    "name": "Franklin Square",
-    "position": {"lat": 39.9555311, "lng": -75.1523687},
-    "street": "200 N 6th St",
-    "cityState": "Philadelphia, PA 19106",
+    "name": "LeFrak Center at Lakeside",
+    "position": {"lat": 40.6572752, "lng": -73.9641611},
+    "street": "171 East Dr",
+    "cityState": "Brooklyn, NY 11225",
     "placeID": "",
-    "neighborhood": "center city"
+    "neighborhood": "brooklyn",
+    "url": "https://lakesidebrooklyn.com/"
   },
   {
-    "name": "Adventure Aquarium",
-    "position": {"lat": 39.9440936, "lng": -75.1328447},
-    "street": "1 Riverside Drive",
-    "cityState": "Camden, NJ 08103",
+    "name": "Prospect Park Zoo",
+    "position": {"lat": 40.6653747, "lng": -73.9654138},
+    "street": "450 Flatbush Ave",
+    "cityState": "Brooklyn, NY 11225",
     "placeID": "",
-    "neighborhood": "south jersey"
+    "neighborhood": "brooklyn",
+    "url": "https://prospectparkzoo.com/"
   },
   {
-    "name": "Spruce Street Harbor Park",
-    "position": {"lat": 39.9450991, "lng": -75.1432427},
-    "street": "301 S Christopher Columbus Boulevard",
-    "cityState": "Philadelphia, PA 19106",
+    "name": "Children's Museum of the Arts",
+    "position": {"lat": 40.7276164, "lng": -74.0081544},
+    "street": "103 Charlton St",
+    "cityState": "New York, NY 10014",
     "placeID": "",
-    "neighborhood": "center city"
+    "neighborhood": "manhattan",
+    "url": "http://http://cmany.org/"
   },
   {
-    "name": "Treetop Quest",
-    "position": {"lat": 39.9989362, "lng": -75.2034423},
-    "street": "51 Chamounix Drive",
-    "cityState": "Philadelphia, PA 19131",
+    "name": "DiMenna Children's History Museum",
+    "position": {"lat": 40.7792476, "lng": -73.9742792},
+    "street": "170 Central Park West",
+    "cityState": "New York, NY 10024",
     "placeID": "",
-    "neighborhood": "west philadelphia"
+    "neighborhood": "manhattan",
+    "url": "https://www.nyhistory.org/childrens-museum"
   },
   {
-    "name": "Smith Memorial Playground",
-    "position": {"lat": 39.981737, "lng": -75.1978785},
-    "street": "3500 Reservoir Drive",
-    "cityState": "Philadelphia, PA 19121",
+    "name": "MET Fifth Avenue",
+    "position": {"lat": 40.7799743, "lng": -73.9633262},
+    "street": "1000 5th Ave",
+    "cityState": "New York, NY 10028",
     "placeID": "",
-    "neighborhood": "west philadelphia"
+    "neighborhood": "manhattan",
+    "url": "https://www.metmuseum.org/visit/met-fifth-avenue"
+  },
+  {
+    "name": "American Museum of Natural History",
+    "position": {"lat": 40.7813241, "lng": -73.9739882},
+    "street": "Central Park West & 79th St",
+    "cityState": "New York, NY 10024",
+    "placeID": "",
+    "neighborhood": "manhattan",
+    "url": "https://www.amnh.org/"
+  },
+  {
+    "name": "Central Park Zoo",
+    "position": {"lat": 40.767778, "lng": -73.9718335},
+    "street": "E 64th St",
+    "cityState": "New York, NY 10021",
+    "placeID": "",
+    "neighborhood": "manhattan",
+    "url": "https://centralparkzoo.com/"
   }
 ]

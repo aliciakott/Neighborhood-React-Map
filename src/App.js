@@ -6,16 +6,16 @@ import './App.css';
 
 class App extends Component {
   state = {
-    locations: [],
-    styles: [],
-    map: {},
-    infowindow: {},
+    locations: null,
+    styles: null,
+    map: null,
+    infowindow: null,
     toggleMenu: false,
     borough: 'all',
-    //events: []
   }
 
   componentDidMount() {
+    // grabbing the locations and styles from their json files and putting in the state
     this.setState({
       locations: locations,
       mapstyles: mapstyles
@@ -23,11 +23,13 @@ class App extends Component {
   }
 
   renderMap = () => {
+    // assinging the initMap to the global method so React can find it
     window.initMap = this.initMap
     this.initScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyB1hMr_sGWDl_e8bK7Fg6YpCrO-eTbIz0E&callback=initMap')
   }
 
   initScript = (url) => {
+    // creating a script tag for the google map and appending it to the body tag
     const body = window.document.getElementsByTagName('body')[0]
     const script = window.document.createElement('script')
     script.src = url
@@ -37,7 +39,8 @@ class App extends Component {
   }
 
   initMap = () => {
-    let styles = this.state.mapstyles
+    // initializing the map
+    const styles = this.state.mapstyles
     let infowindow = new window.google.maps.InfoWindow()
     let map = new window.google.maps.Map(
       document.getElementById('map'), {
@@ -54,7 +57,11 @@ class App extends Component {
   }
 
   initMarkers = () => {
+    // had a problem with closures. couldn't define. this.bounceMarker inside an event listener,
+    // so I added it to the state
     window.bounceMarker = this.bounceMarker
+
+    // creating a marker for every default location in the state and adding an event listener to each
     let locations = this.state.locations
     locations.map(location => {
       let marker = new window.google.maps
@@ -72,9 +79,11 @@ class App extends Component {
   }
 
   showMarkers = () => {
-    var map = this.state.map
-    var locations = this.state.locations
-    var bounds = new window.google.maps.LatLngBounds()
+    // loops through each location and set's the marker's map to the map div in the DOM
+    // also resets the map's bounds to zoom in and out depending on which markers are in view
+    let map = this.state.map
+    let locations = this.state.locations
+    let bounds = new window.google.maps.LatLngBounds()
 
     locations.map(location => {
       bounds.extend(location.position)
@@ -92,7 +101,8 @@ class App extends Component {
   }
 
   hideMarkers = () => {
-    var locations = this.state.locations
+    // loops through all markers and set's their map to null
+    let locations = this.state.locations
     locations.map(location => {
       location.marker.setMap(null)
       location.marker.setAnimation(null)
@@ -104,10 +114,13 @@ class App extends Component {
   }
 
   bounceMarker = (location) => {
-    var marker = location.marker
-    var map = this.state.map
-    var infowindow = this.state.infowindow
-    var locations = this.state.locations
+    // takes the individual location and changes the animation type of its marker
+    // to bounce, opens the infowindow on that marker, and adds an event listener
+    // to the infowindow so that the animation stops when it is closed
+    let marker = location.marker
+    let map = this.state.map
+    let infowindow = this.state.infowindow
+    let locations = this.state.locations
 
     locations.map(location => {
       location.marker.setAnimation(null)
@@ -126,11 +139,13 @@ class App extends Component {
 
     this.setState({
       locations: locations,
+      infowindow: infowindow,
       toggleMenu: false
     }, this.searchVenue(location))
   }
 
   filterLocales = (borough) => {
+    // changes the available place markers on the map and list view, depending on the selected borough
     this.hideMarkers()
     if (borough === 'all') {
       this.setState({
@@ -146,13 +161,16 @@ class App extends Component {
   }
 
   searchVenue = (location) => {
-    var point = location.position
-    var query = point.lat + ',' + point.lng
-    var name = location.name.replace(/\s/g, '+')
-    var venueDetailsURL = null
-    var id = null
-    var url = `https://api.foursquare.com/v2/venues/explore?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323&limit=1&intent=match&name=${name}&ll=${query}`
+    // grabs the coordinates and location name of the selected place
+    // and formats it into a url for an API call
+    let point = location.position
+    let query = point.lat + ',' + point.lng
+    let name = location.name.replace(/\s/g, '+')
+    let venueDetailsURL = null
+    let id = null
+    let url = `https://api.foursquare.com/v2/venues/explore?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323&limit=1&intent=match&name=${name}&ll=${query}`
 
+    // fetches the call and formats the response for addedInfo()
     fetch(url)
       .then(response => response.json())
       .then(data => id = data.response.groups[0].items[0].venue.id)
@@ -166,11 +184,13 @@ class App extends Component {
   }
 
   addedInfo = (location, data) => {
-    var infowindow = this.state.infowindow
-    var venue = data.response.venue
+    let infowindow = this.state.infowindow
+    let venue = data.response.venue
 
+    // IF the response is valid, the infowindow is updated to include the additional content
+    // otherwise the user is informed that no other information is currently available
     if (venue !== undefined) {
-      var image = venue.bestPhoto
+      let image = venue.bestPhoto
       infowindow.setContent(`
         <div>${location.name}</div>
         <div>${venue.hours.status}</div>
@@ -180,6 +200,7 @@ class App extends Component {
     } else {
       infowindow.setContent(`
         <div>${location.name}</div>
+        <div>${location.street}, ${location.cityState}</div>
         <div><a href="${location.url}">Visit their website</a></div>
         <div>No information available, please check again later</div>
       `)
@@ -190,6 +211,7 @@ class App extends Component {
   }
 
   toggleSwitch = () => {
+    // allows the user to toggle the sidebar's list view on and off
     let menu = this.state.toggleMenu
     if (menu === true) {
       this.closeMenu()
@@ -199,6 +221,8 @@ class App extends Component {
   }
 
   openMenu = () => {
+    // opens the sidebar and the list view. any markers that were currently selected
+    // (and thus bouncing) has its animation set back to null and infowindow closed
     let infowindow = this.state.infowindow
     infowindow.close()
 
@@ -215,7 +239,8 @@ class App extends Component {
   }
 
   closeMenu = () => {
-    let menu = window.document.getElementById('menu')
+    // removes the sidebar and overlay and sets the focus back to the menu button
+    const menu = window.document.getElementById('menu')
     menu.focus()
     this.setState({
       toggleMenu: false
@@ -223,6 +248,7 @@ class App extends Component {
   }
 
   render() {
+    const { toggleMenu, locations, borough } = this.state
     return (
       <div className="App">
         <header className="App-header">
@@ -232,13 +258,13 @@ class App extends Component {
           </h1>
         </header>
         <main>
-          {this.state.toggleMenu === true && (
+          {toggleMenu === true && (
           <SideBar
-            locations={this.state.locations}
+            locations={locations}
             filter={this.filterLocales}
             closeMenu={this.closeMenu}
             bounceMarker={this.bounceMarker}
-            borough={this.state.borough} />
+            borough={borough} />
           )}
 
           <section id="map-container">

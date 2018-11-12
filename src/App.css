@@ -48,27 +48,50 @@ a:focus {
 }
 header {
   color: #FF5733;
-  z-index: 8888;
+  z-index: 9999;
   height: 50px;
+  display: grid;
+  grid-template-columns: 50px auto;
 }
 h1 {
-  /*font-size: 20px;*/
   font-family: "Roboto";
   font-weight: 300;
-  /*padding: 0 25px;*/
   margin-top: 5px;
   text-align: center;
+  display: inline-block;
 }
-main {
+#menu {
+  display: inline;
+  margin: 15px;
+  font-size: 20px;
+}
+#map-container {
+  width: 100vw;
+  position: absolute;
+  top: 50;
+  left: 0;
+}
+#map-container,
+#sidebar-container,
+#sidebar-overlay,
+#sidebar {
+  height: calc(100vh - 60px);
+}
+#sidebar-container {
+  width: 100vw;
   display: grid;
   grid-template-columns: 230px auto;
+  z-index: 9999;
+  position: absolute;
+  top: 50;
+  left: 0;
+}
+#sidebar-overlay {
+
 }
 #sidebar {
   background-color: #F6F1EB;
   /*padding-left: 15px;*/
-}
-#sidebar, #map-container {
-  height: calc(100vh - 60px);
 }
 .button-link {
   border: 0;
@@ -109,27 +132,14 @@ li {
   position: absolute;
   top: 0;
   z-index: 9999;
-  /*opacity: 0.75;*/
-  animation: open-modal 1s linear 0s normal;
+  animation: open-sidebar 1s linear 0s normal;
 }
 
-#modal {
-    vertical-align: middle;
-    margin: auto;
-    width: 75%;
-    height: 75%;
-    max-width: 800px;
-    background-color: #F7F7F7;
-    opacity: 1;
-}
-
-@keyframes open-modal {
+@keyframes open-sidebar {
   from {
     width: 0vw;
-    height: 0vh;
   }
   to {
     width: 100vw;
-    height: 100vh;
   }
 }

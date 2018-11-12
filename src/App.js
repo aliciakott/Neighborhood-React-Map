@@ -6,9 +6,11 @@ import './App.css';
 class App extends Component {
   state = {
     locations: [],
-    map: {},
     styles: [],
-    modalOpen: false,
+    map: {},
+    infowindow: {},
+    toggleMenu: false,
+    borough: 'all',
     events: []
   }
 
@@ -25,6 +27,7 @@ class App extends Component {
   }
 
   initMap = () => {
+    window.bounceMarker = this.bounceMarker
     let locations = this.state.locations
     let styles = this.state.mapstyles
     let infowindow = new window.google.maps.InfoWindow()
@@ -40,20 +43,29 @@ class App extends Component {
     locations.map(location => {
       let marker = new window.google.maps.Marker({
         position: location.position,
-        animation: window.google.maps.Animation.DROP
+        icon: '',
+        labelContent: '<i class="fas fa-map-marker-alt" style="color:#F7F7F7;"></i>',
+        labelAnchor: new window.google.maps.Point(22, 50)
       })
+
       marker.addListener('click', function() {
-        marker.setAnimation(window.google.maps.Animation.BOUNCE)
-        infowindow.setContent(location.name)
-        infowindow.open(map, marker)
+        window.bounceMarker(marker)
       })
+
       location.marker = marker
       return null
     })
 
+    window.google.maps.event.addListener(infowindow, 'domready', function() {
+      document.getElementById('test').addEventListener('click', function(e) {
+        console.log('success!')
+      })
+    })
+
     this.setState({
       locations: locations,
-      map: map
+      map: map,
+      infowindow: infowindow
     }, this.showMarkers)
   }
 
@@ -70,18 +82,23 @@ class App extends Component {
     this.hideMarkers()
     if (borough === 'all') {
       this.setState({
-        locations: locations
+        locations: locations,
+        borough: 'all'
       }, this.showMarkers)
     } else {
       this.setState({
-        locations: locations.filter(location => location.neighborhood === borough)
+        locations: locations.filter(location => location.neighborhood === borough),
+        borough: borough
       }, this.showMarkers)
     }
   }
 
   hideMarkers = () => {
     var locations = this.state.locations
-    locations.map(location => location.marker.setMap(null))
+    locations.map(location => {
+      location.marker.setMap(null)
+      location.marker.setAnimation(null)
+    })
     this.setState({
       locations: locations
     })
@@ -92,8 +109,11 @@ class App extends Component {
     var locations = this.state.locations
     var bounds = new window.google.maps.LatLngBounds()
     locations.map(location => {
-      location.marker.setMap(map)
       bounds.extend(location.position)
+      location.marker.setAnimation(window.google.maps.Animation.DROP)
+      window.setTimeout(function() {
+        location.marker.setMap(map)
+      }, 1000)
       return null
     })
     map.fitBounds(bounds)
@@ -105,38 +125,45 @@ class App extends Component {
 
   searchEvents = (location) => {
     //this.searchEvents(location)
-    var query = location.street.replace(/\s/g, '+').concat('+', location.cityState.replace(/\s/g, '+'))
-    var locations = this.state.locations
-
-    var test = 'https://api.nytimes.com/svc/search/v2/articlesearch.json?q="central%20park%20zoo"&api-key=f2da235b5a6241c4a20fc2346b73a111'
+    var query = null
     var header = new Headers()
     var request = new Request(test, { method: 'GET', header })
     fetch(request).then(response => response.json())
       .then(data => console.log(data))
-
-    locations.map((l) => {
-      l.marker.setAnimation(null)
-      if (l.name === location.name) {
-        l.marker.setAnimation(window.google.maps.Animation.BOUNCE)
-        this.setState({
-          locations: locations
-        })
-      }
-      return null
-    })
   }
 
-  openModal = () => {
+  openMenu = () => {
     this.setState({
-      modalOpen: true
+      toggleMenu: true
     })
   }
 
-  closeModal = () => {
+  closeMenu = () => {
     let select = window.document.getElementById('neighborhoods-select')
     select.focus()
     this.setState({
-      modalOpen: false
+      toggleMenu: false
+    })
+  }
+
+  bounceMarker = (marker) => {
+    var map = this.state.map
+    var infowindow = this.state.infowindow
+    infowindow.setContent(null)
+
+    var locations = this.state.locations
+    locations.map(location => {
+      location.marker.setAnimation(null)
+      if (location.marker === marker) {
+        location.marker.setAnimation(window.google.maps.Animation.BOUNCE)
+        infowindow.setContent(`<div id="test">${location.name}</div>`)
+        infowindow.open(map, marker)
+      }
+    })
+
+
+    this.setState({
+      locations: locations
     })
   }
 
@@ -144,14 +171,16 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
+          <i class="fas fa-bars" id="menu" onClick={() => this.openMenu()}></i>
           <h1>
             Kid Friendly Places In NYC
           </h1>
         </header>
         <main>
-          <section id="sidebar">
-            <div id="">
-              <select aria-label="filter locations by neighborhood" id="neighborhoods-select" onChange={(event) => this.filterLocales(event.target.value)}>
+          {this.state.toggleMenu === true &&
+          (<section id="sidebar-container">
+            <div id="sidebar">
+              <select value={this.state.borough} aria-label="filter locations by neighborhood" id="neighborhoods-select" onChange={(event) => this.filterLocales(event.target.value)}>
                 <option value="all">All Neighborhoods</option>
                 <option value="brooklyn">Brooklyn</option>
                 <option value="bronx">The Bronx</option>
@@ -162,23 +191,18 @@ class App extends Component {
 
               <ul id="list-locales">
                 {this.state.locations.map(location => (
-                  <li key={location.name}><button className="button-link" onClick={() => this.openModal()}>{location.name}</button></li>
+                  <li key={location.name}><button className="button-link" onClick={() => this.bounceMarker(location.marker)}>{location.name}</button></li>
                 ))}
               </ul>
             </div>
-          </section>
+            <div id="sidebar-overlay" onClick={() => this.closeMenu()}>
+            </div>
+          </section>)}
 
           <section id="map-container">
             <div id="map" role="application" aria-roledescription="map" aria-label="map of new york city attractions"></div>
           </section>
 
-          <section>
-          {this.state.modalOpen === true &&
-            (<div id="modal-container">
-              <div id="modal"><button onClick={() => this.closeModal()}>close window</button></div>
-            </div>)
-          }
-          </section>
         </main>
       </div>
     );

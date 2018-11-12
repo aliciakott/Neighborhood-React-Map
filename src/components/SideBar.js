@@ -1,8 +1,10 @@
-import React from 'react';
+import React from 'react'
+import PropTypes from 'prop-types'
 
 function SideBar(props) {
   const {locations, filter, closeMenu, bounceMarker, borough} = props
 
+  // JSX map() function loops through the locations array and creates a new list item and button
   return (
     <section id="sidebar-container">
       <div id="sidebar">
@@ -26,6 +28,15 @@ function SideBar(props) {
       </div>
     </section>
   )
+}
+
+SideBar.propTypes = {
+  // verifies that the props are the correct data type
+  borough: PropTypes.string.isRequired,
+  locations: PropTypes.array.isRequired,
+  bounceMarker: PropTypes.func.isRequired,
+  closeMenu: PropTypes.func.isRequired,
+  filter: PropTypes.func.isRequired
 }
 
 export default SideBar

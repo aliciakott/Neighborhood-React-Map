@@ -148,9 +148,10 @@ class App extends Component {
   searchVenue = (location) => {
     var point = location.position
     var query = point.lat + ',' + point.lng
+    var name = location.name.replace(/\s/g, '+')
     var venueDetailsURL = null
     var id = null
-    var url = `https://api.foursquare.com/v2/venues/explore?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323&ll=${query}`
+    var url = `https://api.foursquare.com/v2/venues/explore?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323&limit=1&intent=match&name=${name}&ll=${query}`
 
     fetch(url)
       .then(response => response.json())
@@ -159,13 +160,9 @@ class App extends Component {
         venueDetailsURL = `https://api.foursquare.com/v2/venues/${id}?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323`
         fetch(venueDetailsURL)
           .then(response => response.json())
-          .then(data => {
-            this.addedInfo(location, data)
-          })
+          .then(data => this.addedInfo(location, data))
         })
-        //.catch(error => console.log(error))
       .catch(error => console.log(error))
-
   }
 
   addedInfo = (location, data) => {
@@ -179,6 +176,12 @@ class App extends Component {
         <div>${venue.hours.status}</div>
         <div><a href="${location.url}">Visit their website</a></div>
         <div id="added-info"><img src="${(image.prefix + image.width + image.suffix)}" alt="${location.name}" id="added-info-img"></div>
+      `)
+    } else {
+      infowindow.setContent(`
+        <div>${location.name}</div>
+        <div><a href="${location.url}">Visit their website</a></div>
+        <div>No information available, please check again later</div>
       `)
     }
     this.setState({
@@ -241,8 +244,8 @@ class App extends Component {
           <section id="map-container">
             <div id="map" role="application" aria-roledescription="map" aria-label="map of new york city attractions"></div>
           </section>
-
         </main>
+        <footer>Images and venue hours provided by <a href="https://foursquare.com/developers/">Foursquare</a></footer>
       </div>
     );
   }

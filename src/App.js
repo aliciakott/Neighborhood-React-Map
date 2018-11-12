@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import locations from './data/locations.json';
 import mapstyles from './data/mapstyles.json';
+import SideBar from './components/SideBar'
 import './App.css';
 
 class App extends Component {
@@ -11,7 +12,7 @@ class App extends Component {
     infowindow: {},
     toggleMenu: false,
     borough: 'all',
-    events: []
+    //events: []
   }
 
   componentDidMount() {
@@ -26,9 +27,16 @@ class App extends Component {
     this.initScript('https://maps.googleapis.com/maps/api/js?key=AIzaSyB1hMr_sGWDl_e8bK7Fg6YpCrO-eTbIz0E&callback=initMap')
   }
 
+  initScript = (url) => {
+    const body = window.document.getElementsByTagName('body')[0]
+    const script = window.document.createElement('script')
+    script.src = url
+    script.async = true
+    script.defer = true
+    body.appendChild(script)
+  }
+
   initMap = () => {
-    window.bounceMarker = this.bounceMarker
-    let locations = this.state.locations
     let styles = this.state.mapstyles
     let infowindow = new window.google.maps.InfoWindow()
     let map = new window.google.maps.Map(
@@ -39,37 +47,87 @@ class App extends Component {
         mapTypeControl: false,
         styles: styles
       })
+    this.setState({
+      map: map,
+      infowindow: infowindow
+    }, this.initMarkers)
+  }
 
+  initMarkers = () => {
+    window.bounceMarker = this.bounceMarker
+    let locations = this.state.locations
     locations.map(location => {
-      let marker = new window.google.maps.Marker({
-        position: location.position,
-        icon: '',
-        labelContent: '<i class="fas fa-map-marker-alt" style="color:#F7F7F7;"></i>',
-        labelAnchor: new window.google.maps.Point(22, 50)
-      })
+      let marker = new window.google.maps
+        .Marker({ position: location.position })
 
-      marker.addListener('click', function() {
-        window.bounceMarker(location)
-      })
+      marker.addListener('click',
+        () => window.bounceMarker(location))
 
       location.marker = marker
+      return null
+    })
+    this.setState({
+      locations: locations,
+    }, this.showMarkers)
+  }
+
+  showMarkers = () => {
+    var map = this.state.map
+    var locations = this.state.locations
+    var bounds = new window.google.maps.LatLngBounds()
+
+    locations.map(location => {
+      bounds.extend(location.position)
+      location.marker.setAnimation(window.google.maps.Animation.DROP)
+      window.setTimeout(function() {
+        location.marker.setMap(map)
+      }, 1000)
+      return null
+    })
+    map.fitBounds(bounds)
+    this.setState({
+      locations: locations,
+      map: map
+    })
+  }
+
+  hideMarkers = () => {
+    var locations = this.state.locations
+    locations.map(location => {
+      location.marker.setMap(null)
+      location.marker.setAnimation(null)
+      return null
+    })
+    this.setState({
+      locations: locations
+    })
+  }
+
+  bounceMarker = (location) => {
+    var marker = location.marker
+    var map = this.state.map
+    var infowindow = this.state.infowindow
+    var locations = this.state.locations
+
+    locations.map(location => {
+      location.marker.setAnimation(null)
+      if (location.marker === marker) {
+        location.marker.setAnimation(window.google.maps.Animation.BOUNCE)
+        infowindow.setContent(`
+          <div>${location.name}</div>
+          <div><a href="${location.url}">Visit their website</a></div>`)
+        infowindow.open(map, marker)
+        infowindow.addListener('closeclick', () => {
+          location.marker.setAnimation(null)
+        })
+      }
       return null
     })
 
     this.setState({
       locations: locations,
-      map: map,
-      infowindow: infowindow
-    }, this.showMarkers)
-  }
-
-  initScript = (url) => {
-    const body = window.document.getElementsByTagName('body')[0]
-    const script = window.document.createElement('script')
-    script.src = url
-    script.async = true
-    script.defer = true
-    body.appendChild(script)
+      toggleMenu: false
+    }, this.searchVenue(location))
   }
 
   filterLocales = (borough) => {
@@ -85,36 +143,6 @@ class App extends Component {
         borough: borough
       }, this.showMarkers)
     }
-  }
-
-  hideMarkers = () => {
-    var locations = this.state.locations
-    locations.map(location => {
-      location.marker.setMap(null)
-      location.marker.setAnimation(null)
-    })
-    this.setState({
-      locations: locations
-    })
-  }
-
-  showMarkers = () => {
-    var map = this.state.map
-    var locations = this.state.locations
-    var bounds = new window.google.maps.LatLngBounds()
-    locations.map(location => {
-      bounds.extend(location.position)
-      location.marker.setAnimation(window.google.maps.Animation.DROP)
-      window.setTimeout(function() {
-        location.marker.setMap(map)
-      }, 1000)
-      return null
-    })
-    map.fitBounds(bounds)
-    this.setState({
-      locations: locations,
-      map: map
-    })
   }
 
   searchVenue = (location) => {
@@ -141,97 +169,74 @@ class App extends Component {
   }
 
   addedInfo = (location, data) => {
-    var locations = this.state.locations
     var infowindow = this.state.infowindow
     var venue = data.response.venue
-    var image = venue.bestPhoto
-    infowindow.setContent(`
-      <div id="added-info">
-      <div>${location.name}</div>
-      <div>${venue.hours.status}</div>
-      <div><a href="${location.url}">Visit their website</a></div>
-      <div><img src="${image.prefix + image.width + image.suffix}" alt="${location.name}" height="auto"></div>
-      </div>
-    `)
 
-    infowindow.addListener('closeclick', function() {
-      locations.filter(l => l.name = location.name).map(location => {
-        location.marker.setAnimation(null)
-        infowindow.setContent(null)
-      })
+    if (venue !== undefined) {
+      var image = venue.bestPhoto
+      infowindow.setContent(`
+        <div>${location.name}</div>
+        <div>${venue.hours.status}</div>
+        <div><a href="${location.url}">Visit their website</a></div>
+        <div id="added-info"><img src="${(image.prefix + image.width + image.suffix)}" alt="${location.name}" id="added-info-img"></div>
+      `)
+    }
+    this.setState({
+      infowindow: infowindow
     })
   }
 
+  toggleSwitch = () => {
+    let menu = this.state.toggleMenu
+    if (menu === true) {
+      this.closeMenu()
+    } else {
+      this.openMenu()
+    }
+  }
+
   openMenu = () => {
-    var infowindow = this.state.infowindow
+    let infowindow = this.state.infowindow
     infowindow.close()
-    // and set marker animation to null
+
+    let locations = this.state.locations
+    locations.map(location => {
+      location.marker.setAnimation(null)
+      return null
+    })
+
     this.setState({
+      locations: locations,
       toggleMenu: true
     })
   }
 
   closeMenu = () => {
-    let select = window.document.getElementById('neighborhoods-select')
-    select.focus()
+    let menu = window.document.getElementById('menu')
+    menu.focus()
     this.setState({
       toggleMenu: false
     })
-  }
-
-  bounceMarker = (location) => {
-    var marker = location.marker
-    var map = this.state.map
-    var infowindow = this.state.infowindow
-    infowindow.setContent(null)
-
-    var locations = this.state.locations
-    locations.map(location => {
-      location.marker.setAnimation(null)
-      if (location.marker === marker) {
-        location.marker.setAnimation(window.google.maps.Animation.BOUNCE)
-        infowindow.setContent(`<div>${location.name}</div>`)
-        infowindow.open(map, marker)
-      }
-    })
-
-    this.setState({
-      locations: locations,
-      toggleMenu: false
-    }, this.searchVenue(location))
   }
 
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <i className="fas fa-bars" id="menu" onClick={() => this.openMenu()}></i>
+          <button aria-label="menu button, click for list view" id="menu" onClick={() => this.toggleSwitch()}><i className="fas fa-bars"></i></button>
           <h1>
             Kid Friendly Places In NYC
           </h1>
         </header>
         <main>
-          {this.state.toggleMenu === true &&
-          (<section id="sidebar-container">
-            <div id="sidebar">
-              <select value={this.state.borough} aria-label="filter locations by neighborhood" id="neighborhoods-select" onChange={(event) => this.filterLocales(event.target.value)}>
-                <option value="all">All Neighborhoods</option>
-                <option value="brooklyn">Brooklyn</option>
-                <option value="bronx">The Bronx</option>
-                <option value="manhattan">Manhattan</option>
-                <option value="staten island">Staten Island</option>
-                <option value="queens">Queens</option>
-              </select>
-
-              <ul id="list-locales">
-                {this.state.locations.map(location => (
-                  <li key={location.name}><button className="button-link" onClick={() => this.bounceMarker(location)}>{location.name}</button></li>
-                ))}
-              </ul>
-            </div>
-            <div id="sidebar-overlay" onClick={() => this.closeMenu()}>
-            </div>
-          </section>)}
+          {this.state.toggleMenu === true && (
+          <SideBar
+            locations={this.state.locations}
+            filter={this.filterLocales}
+            closeMenu={this.closeMenu}
+            bounceMarker={this.bounceMarker}
+            borough={this.state.borough} />
+          )}
 
           <section id="map-container">
             <div id="map" role="application" aria-roledescription="map" aria-label="map of new york city attractions"></div>

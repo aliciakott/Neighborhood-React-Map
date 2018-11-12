@@ -4,7 +4,6 @@
     "position": {"lat": 40.8505989, "lng": -73.8791869},
     "street": "2300 Southern Blvd",
     "cityState": "Bronx, NY 10460",
-    "placeID": "",
     "neighborhood": "bronx",
     "url": "https://bronxzoo.com/"
   },
@@ -13,7 +12,6 @@
     "position": {"lat": 40.747151, "lng": -73.851666},
     "street": "47-01 111th St",
     "cityState": "Corona, NY 11368",
-    "placeID": "",
     "neighborhood": "queens",
     "url": "https://nysci.org/"
   },
@@ -22,7 +20,6 @@
     "position": {"lat": 40.642459, "lng": -74.101935},
     "street": "1000 Richmond Terrace building M",
     "cityState": "Staten Island, NY 10301",
-    "placeID": "",
     "neighborhood": "staten island",
     "url": "http://sichildrensmuseum.org"
   },
@@ -31,7 +28,6 @@
     "position": {"lat": 40.6572752, "lng": -73.9641611},
     "street": "171 East Dr",
     "cityState": "Brooklyn, NY 11225",
-    "placeID": "",
     "neighborhood": "brooklyn",
     "url": "https://lakesidebrooklyn.com/"
   },
@@ -40,7 +36,6 @@
     "position": {"lat": 40.6653747, "lng": -73.9654138},
     "street": "450 Flatbush Ave",
     "cityState": "Brooklyn, NY 11225",
-    "placeID": "",
     "neighborhood": "brooklyn",
     "url": "https://prospectparkzoo.com/"
   },
@@ -49,7 +44,6 @@
     "position": {"lat": 40.7276164, "lng": -74.0081544},
     "street": "103 Charlton St",
     "cityState": "New York, NY 10014",
-    "placeID": "",
     "neighborhood": "manhattan",
     "url": "http://http://cmany.org/"
   },
@@ -58,7 +52,6 @@
     "position": {"lat": 40.7792476, "lng": -73.9742792},
     "street": "170 Central Park West",
     "cityState": "New York, NY 10024",
-    "placeID": "",
     "neighborhood": "manhattan",
     "url": "https://www.nyhistory.org/childrens-museum"
   },
@@ -67,7 +60,6 @@
     "position": {"lat": 40.7799743, "lng": -73.9633262},
     "street": "1000 5th Ave",
     "cityState": "New York, NY 10028",
-    "placeID": "",
     "neighborhood": "manhattan",
     "url": "https://www.metmuseum.org/visit/met-fifth-avenue"
   },
@@ -76,7 +68,6 @@
     "position": {"lat": 40.7813241, "lng": -73.9739882},
     "street": "Central Park West & 79th St",
     "cityState": "New York, NY 10024",
-    "placeID": "",
     "neighborhood": "manhattan",
     "url": "https://www.amnh.org/"
   },
@@ -85,7 +76,6 @@
     "position": {"lat": 40.767778, "lng": -73.9718335},
     "street": "E 64th St",
     "cityState": "New York, NY 10021",
-    "placeID": "",
     "neighborhood": "manhattan",
     "url": "https://centralparkzoo.com/"
   }

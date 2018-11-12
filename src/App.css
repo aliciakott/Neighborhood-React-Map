@@ -124,6 +124,9 @@ ul {
 li {
   padding: 10px;
 }
+#added-info {
+  max-height: 300px;
+}
 
 #modal-container {
   background-color: rgba(246,241,235,0.75);

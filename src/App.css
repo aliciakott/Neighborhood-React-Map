@@ -101,11 +101,11 @@ li {
   padding: 10px;
 }
 #added-info {
-  max-height: 300px;
+  max-height: 200px;
   overflow: hidden;
 }
 #added-info-img {
-  max-height: 300px;
+  max-height: 200px;
   width: auto;
 }
 footer {

@@ -38,7 +38,12 @@ Please verify that your local directory has the following:
 
 You will also need the `prop-types` package, which should be included in your download
 
-Finally, this app also makes use of the free [Google fonts](http://fonts.googleapis.com/) and [Font Awesome fonts](https://fontawesome.com/).
+All the images and additional information like business hours are provided by the [Foursquare API](https://foursquare.com/developers/). Finally, this app also makes use of the free [Google fonts](http://fonts.googleapis.com/) and [Font Awesome fonts](https://fontawesome.com/).
+
+#### About that Service Worker
+
+It only works in production mode. Open your terminal or git bash and enter `npm run build` to minify and optimize the files.
+Once this is done, serviceWorker.js checks if a service worker is already registered (and unregisters it, if found). Then it registers a service worker and sends a message to the user if an update is available.
 
 
 ## Using the Neighborhood React Map

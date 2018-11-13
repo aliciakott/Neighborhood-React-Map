@@ -35,6 +35,7 @@ class App extends Component {
     script.src = url
     script.async = true
     script.defer = true
+    script.onerror = () => window.alert('There was a problem loading the script. Please refresh the page.')
     body.appendChild(script)
   }
 
@@ -50,6 +51,9 @@ class App extends Component {
         mapTypeControl: false,
         styles: styles
       })
+
+    window.gm_authFailure = () => window.alert('Authorization Failed. Please refresh the page or try again later.')
+
     this.setState({
       map: map,
       infowindow: infowindow
@@ -176,11 +180,14 @@ class App extends Component {
       .then(data => id = data.response.groups[0].items[0].venue.id)
       .then(id => {
         venueDetailsURL = `https://api.foursquare.com/v2/venues/${id}?client_id=QS3H514QHDPTUOALBKTXWKXADRNN4OZBWQCLM5YNMIXZZNFI&client_secret=PCQ2V4XHFQ2K03OTZ522OJ2ZVLARL4KIEBR5M4LJSY1TLTIA&v=20180323`
-        fetch(venueDetailsURL)
-          .then(response => response.json())
-          .then(data => this.addedInfo(location, data))
-        })
-      .catch(error => console.log(error))
+        return fetch(venueDetailsURL)
+      })
+      .then(response => response.json())
+      .then(data => this.addedInfo(location, data))
+      .catch(error => {
+        console.log(error)
+        return window.alert('Error: Data request failed. Please try again later.')
+      })
   }
 
   addedInfo = (location, data) => {
